@@ -5,8 +5,7 @@
 // that require Authorization: Bearer <token>. Avoids shell-quoting headaches
 // on Windows (PowerShell/cmd) that `node -e "..."` one-liners run into.
 
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const userId = process.argv[2];
