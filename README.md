@@ -46,7 +46,7 @@ node -e "console.log(require('jsonwebtoken').sign({sub:'<demo-user-id>'}, '<your
 cd mobile
 cp .env.example .env
 npm install
-npx expo start
+npm run dev
 ```
 
 Set `DEMO_COMPETITION_ID` in `App.js` to the id printed by the seed script.
