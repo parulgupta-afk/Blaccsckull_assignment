@@ -11,7 +11,7 @@ export default function CompetitionHeader({ competition, locale }) {
     <View style={styles.card}>
       <View style={styles.titleRow}>
         <Text style={styles.title}>{title}</Text>
-        {competition.viewer.registrationStatus !== 'not_registered' && (
+        {['confirmed', 'submitted'].includes(competition.viewer.registrationStatus) && (
           <View style={styles.registeredBadge}>
             <Text style={styles.registeredBadgeText}>✓ {t(locale, 'registered')}</Text>
           </View>

@@ -32,6 +32,8 @@
   "full": "Competition Full",
   "closed": "Registration Closed",
   "judgingInProgress": "Judging in progress",
+  "submissionNotOpenYet": "Submissions open soon",
+  "completingPayment": "Completing payment…",
   "completed": "Competition Completed",
   "loginToRegister": "Login to Register"
 }

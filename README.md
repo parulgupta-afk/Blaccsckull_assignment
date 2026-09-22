@@ -33,12 +33,14 @@ MongoDB Atlas cluster (Atlas is a replica set by default) and put its URI in
 `.env`.
 
 The seed script prints a competition `_id` and a demo user `_id`. Requests are
-authenticated with a JWT whose `sub` claim is a user id — for local testing,
-mint one quickly:
+authenticated with a JWT whose `sub` claim is a user id — mint one with:
 
 ```bash
-node -e "console.log(require('jsonwebtoken').sign({sub:'<demo-user-id>'}, '<your JWT_SECRET>'))"
+npm run mint-token -- <demo-user-id>
 ```
+
+(This works the same on Windows, Mac, and Linux — no shell-quoting issues,
+unlike a `node -e "..."` one-liner, which PowerShell/cmd can mangle.)
 
 ### Mobile
 
@@ -46,7 +48,7 @@ node -e "console.log(require('jsonwebtoken').sign({sub:'<demo-user-id>'}, '<your
 cd mobile
 cp .env.example .env
 npm install
-npm run dev
+npx expo start
 ```
 
 Set `DEMO_COMPETITION_ID` in `App.js` to the id printed by the seed script.
@@ -194,6 +196,3 @@ piece of the assignment a static/hardcoded implementation cannot fake.
 Not included in this submission artifact — see the assignment's submission
 requirements for what a full PR/repo would additionally need (GitHub repo,
 env details, short demo recording).
-"# Blaccsckull_assignment" 
-"# Blaccsckull_assignment" 
-"# Blaccsckull_assignment" 

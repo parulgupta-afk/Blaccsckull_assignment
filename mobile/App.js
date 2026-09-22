@@ -8,7 +8,7 @@ const queryClient = new QueryClient();
 // A real app wires this via React Navigation (route param = competitionId,
 // auth state from context). Hardcoded here so the screen is runnable
 // standalone against the seeded competition.
-const DEMO_COMPETITION_ID = '6ab1f2a0b91b19bc597a7b01';
+const DEMO_COMPETITION_ID = '6ab1f38ae06fe5bce38fb391';
 
 export default function App() {
   return (

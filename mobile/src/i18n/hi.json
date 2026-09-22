@@ -32,6 +32,8 @@
   "full": "प्रतियोगिता पूर्ण",
   "closed": "पंजीकरण बंद",
   "judgingInProgress": "निर्णय जारी है",
+  "submissionNotOpenYet": "सबमिशन जल्द शुरू होगा",
+  "completingPayment": "भुगतान पूरा हो रहा है…",
   "completed": "प्रतियोगिता समाप्त",
   "loginToRegister": "पंजीकरण के लिए लॉगिन करें"
 }

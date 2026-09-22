@@ -26,12 +26,22 @@ export default function BottomActionBar({ competition, locale, isAuthenticated, 
     label = t(locale, 'uploadSubmission');
     onPress = onUpload;
   } else if (viewer.registrationStatus === 'confirmed') {
-    label = `${t(locale, 'registered')} — ${
-      lifecycle.phase === 'judging' ? t(locale, 'judgingInProgress') : t(locale, 'registrationClosed')
-    }`;
+    // Registered, but the submission window either hasn't started yet or
+    // has already ended. Previously this always said "Registration
+    // closed" here, which was wrong whenever registration was in fact
+    // still open for other users and this participant was just waiting
+    // for the submission window to begin.
+    let waitingReason;
+    if (lifecycle.phase === 'judging') waitingReason = t(locale, 'judgingInProgress');
+    else if (lifecycle.phase === 'registration_open' || lifecycle.phase === 'registration_closed') {
+      waitingReason = t(locale, 'submissionNotOpenYet');
+    } else {
+      waitingReason = t(locale, 'registrationClosed');
+    }
+    label = `${t(locale, 'registered')} — ${waitingReason}`;
     disabled = true;
   } else if (viewer.registrationStatus === 'pending_payment') {
-    label = 'Completing payment…';
+    label = t(locale, 'completingPayment');
     disabled = true;
   } else if (lifecycle.phase === 'completed') {
     label = t(locale, 'completed');

@@ -19,7 +19,13 @@ export default function CountdownBanner({ competition, locale }) {
 
   const { days, hours, minutes, seconds, isExpired } = useCountdown(target, serverTime);
 
-  if (lifecycle.phase === 'judging' || lifecycle.phase === 'completed') return null;
+  // Previously this only hid the banner for 'judging' / 'completed', so a
+  // competition sitting in 'registration_closed' (deadline passed, but
+  // submissions haven't opened yet) rendered a stale, already-expired
+  // countdown alongside "Hurry up!" -- confusing since there's nothing
+  // actionable left to hurry toward. Nothing useful to count down to in
+  // that gap, so the banner is hidden there too.
+  if (['registration_closed', 'judging', 'completed'].includes(lifecycle.phase)) return null;
 
   return (
     <View style={styles.banner}>
@@ -32,7 +38,7 @@ export default function CountdownBanner({ competition, locale }) {
       ) : (
         <Text style={styles.time}>{t(locale, 'registrationClosed')}</Text>
       )}
-      <Text style={styles.hurry}>⏱ {t(locale, 'hurryUp')}</Text>
+      {!isExpired && <Text style={styles.hurry}>⏱ {t(locale, 'hurryUp')}</Text>}
     </View>
   );
 }
