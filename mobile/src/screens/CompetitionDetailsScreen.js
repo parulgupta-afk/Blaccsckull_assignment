@@ -7,10 +7,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
+  Alert,
 } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
 import { colors } from '../theme/colors';
 import { useCompetitionDetails } from '../hooks/useCompetitionDetails';
 import { useRegisterCompetition, useSubmitEntry } from '../hooks/useRegisterCompetition';
+import { uploadSubmissionMedia } from '../utils/uploadMedia';
 
 import CompetitionHeader from '../components/CompetitionHeader';
 import JudgeCard from '../components/JudgeCard';
@@ -23,9 +26,34 @@ import BottomActionBar from '../components/BottomActionBar';
 
 export default function CompetitionDetailsScreen({ competitionId, isAuthenticated = true, onGoBack }) {
   const [locale, setLocale] = useState('en');
+  const [isPicking, setIsPicking] = useState(false);
   const { data: competition, isLoading, isError, error, refetch } = useCompetitionDetails(competitionId, locale);
   const registerMutation = useRegisterCompetition(competitionId, locale);
   const submitMutation = useSubmitEntry(competitionId, locale);
+
+  // Real file picker + validation; the network upload itself is a
+  // clearly-labeled stub (see src/utils/uploadMedia.js) since it needs
+  // object-storage credentials that can't be committed here. Picker
+  // cancellation and validation errors are surfaced to the user instead
+  // of failing silently.
+  const handleUpload = async () => {
+    setIsPicking(true);
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['video/*'],
+        copyToCacheDirectory: true,
+      });
+      if (result.canceled) return;
+
+      const file = result.assets?.[0];
+      const mediaUrl = await uploadSubmissionMedia(file);
+      submitMutation.mutate(mediaUrl);
+    } catch (err) {
+      Alert.alert('Upload', err.message || 'Something went wrong selecting your file.');
+    } finally {
+      setIsPicking(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -81,12 +109,9 @@ export default function CompetitionDetailsScreen({ competitionId, isAuthenticate
         competition={competition}
         locale={locale}
         isAuthenticated={isAuthenticated}
-        isRegistering={registerMutation.isPending || submitMutation.isPending}
+        isRegistering={registerMutation.isPending || submitMutation.isPending || isPicking}
         onRegister={() => registerMutation.mutate()}
-        // A real flow opens a document/video picker, uploads to storage,
-        // then submits the resulting URL. Stubbed with a fixed URL to keep
-        // this screen's business-logic wiring demonstrable end-to-end.
-        onUpload={() => submitMutation.mutate('https://example.com/submissions/demo.mp4')}
+        onUpload={handleUpload}
       />
     </SafeAreaView>
   );

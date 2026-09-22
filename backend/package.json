@@ -8,7 +8,10 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "seed": "node src/seed/seedCompetition.js",
-    "mint-token": "node scripts/mintToken.js"
+    "mint-token": "node scripts/mintToken.js",
+    "test": "jest",
+    "test:unit": "jest --selectProjects unit",
+    "test:integration": "jest --selectProjects integration"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -22,6 +25,20 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "projects": [
+      {
+        "displayName": "unit",
+        "testMatch": ["<rootDir>/src/**/*.unit.test.js"]
+      },
+      {
+        "displayName": "integration",
+        "testMatch": ["<rootDir>/src/**/*.integration.test.js"]
+      }
+    ]
   }
 }
