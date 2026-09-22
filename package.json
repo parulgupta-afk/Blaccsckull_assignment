@@ -1,0 +1,14 @@
+{
+  "name": "feedants-competition-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix backend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:mobile": "npm --prefix mobile run dev",
+    "dev:web": "npm --prefix mobile run web",
+    "seed": "npm --prefix backend run seed",
+    "backend": "npm --prefix backend run dev",
+    "mobile": "npm --prefix mobile run dev"
+  }
+}
