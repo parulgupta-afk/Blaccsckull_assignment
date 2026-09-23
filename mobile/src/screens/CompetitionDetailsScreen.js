@@ -28,6 +28,11 @@ export default function CompetitionDetailsScreen({ competitionId, isAuthenticate
   const [locale, setLocale] = useState('en');
   const [isPicking, setIsPicking] = useState(false);
   const { data: competition, isLoading, isError, error, refetch } = useCompetitionDetails(competitionId, locale);
+  // Once the backend responds, register/submit target the *canonical*
+  // competition id it actually resolved (competition.id) rather than the
+  // prop we asked for -- these can differ when the backend's own fallback
+  // (e.g. an invalid/missing EXPO_PUBLIC_DEMO_COMPETITION_ID) served a
+  // different competition than the one originally requested.
   const activeCompetitionId = competition?.id || competitionId;
   const registerMutation = useRegisterCompetition(activeCompetitionId, locale);
   const submitMutation = useSubmitEntry(activeCompetitionId, locale);

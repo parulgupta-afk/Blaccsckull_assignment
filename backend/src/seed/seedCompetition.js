@@ -47,7 +47,12 @@ async function run() {
       // so tapping "Intro Video" actually opens and plays something,
       // instead of failing on a fake example.com URL. Swap for real judge
       // media when you have it.
-      introVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      // Verified working (checked directly, returns real video/mp4 bytes) --
+      // the previous Google sample-bucket URL started returning an XML
+      // AccessDenied/NoSuchKey error instead of video, which is exactly
+      // the "xml error" you were seeing. testfiles.dev is a small,
+      // purpose-built fixture host for this kind of thing.
+      introVideoUrl: 'https://assets.testfiles.dev/video/sample-3s.mp4',
     },
 
     previousWinners: [
@@ -80,7 +85,7 @@ async function run() {
     },
 
     disclaimer: { en: 'Only contributions from paid participants will be considered for judging.' },
-    prizeMoneyExplainerVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    prizeMoneyExplainerVideoUrl: 'https://assets.testfiles.dev/video/sample-3s.mp4',
     refundPolicyUrl: 'https://feedants.com/refund-policy',
     paymentProvider: 'razorpay',
     referralBaseUrl: 'https://feedants.com/r/',
