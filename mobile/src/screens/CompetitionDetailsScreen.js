@@ -27,9 +27,9 @@ import BottomActionBar from '../components/BottomActionBar';
 export default function CompetitionDetailsScreen({ competitionId, isAuthenticated = true, onGoBack }) {
   const [locale, setLocale] = useState('en');
   const [isPicking, setIsPicking] = useState(false);
-  const { data: competition, isLoading, isError, error, refetch } = useCompetitionDetails(competitionId, locale);
-  const registerMutation = useRegisterCompetition(competitionId, locale);
-  const submitMutation = useSubmitEntry(competitionId, locale);
+  const activeCompetitionId = competition?.id || competitionId;
+  const registerMutation = useRegisterCompetition(activeCompetitionId, locale);
+  const submitMutation = useSubmitEntry(activeCompetitionId, locale);
 
   // Real file picker + validation; the network upload itself is a
   // clearly-labeled stub (see src/utils/uploadMedia.js) since it needs

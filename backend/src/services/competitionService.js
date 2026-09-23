@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Competition = require('../models/Competition');
 const { getUserRegistration } = require('./registrationService');
 
@@ -15,11 +16,17 @@ const pickLocale = (localized, locale) => {
  * device clocks are wrong or the rules change.
  */
 async function getCompetitionDetails(competitionId, { locale = 'en', userId } = {}) {
-  const competition = await Competition.findOne({ _id: competitionId, adminStatus: { $ne: 'archived' } });
+  let competition = null;
+  if (competitionId && mongoose.Types.ObjectId.isValid(competitionId)) {
+    competition = await Competition.findOne({ _id: competitionId, adminStatus: { $ne: 'archived' } });
+  }
+  if (!competition) {
+    competition = await Competition.findOne({ adminStatus: { $ne: 'archived' } }).sort({ createdAt: -1 });
+  }
   if (!competition) return null;
 
   const lifecycle = competition.computeLifecycle();
-  const registration = await getUserRegistration(competitionId, userId);
+  const registration = await getUserRegistration(competition._id, userId);
 
   return {
     id: competition._id,

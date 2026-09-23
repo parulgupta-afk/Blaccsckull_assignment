@@ -39,15 +39,22 @@ async function run() {
       name: 'Manju Dubey',
       title: { en: 'Professional Kathak Dancer', hi: 'व्यावसायिक कथक नर्तकी' },
       experienceLabel: { en: '12+ Years of Experience', hi: '12+ वर्षों का अनुभव' },
-      photoUrl: 'https://example.com/judges/manju-dubey.jpg',
-      introVideoUrl: 'https://example.com/videos/manju-dubey-intro.mp4',
+      // pravatar.cc serves real (placeholder) portrait photos -- unlike the
+      // old example.com URLs, these actually resolve, so the judge photo
+      // and winner thumbnails render instead of showing blank/broken images.
+      photoUrl: 'https://i.pravatar.cc/300?img=47',
+      // A real, public-domain sample video (Google's standard test clip)
+      // so tapping "Intro Video" actually opens and plays something,
+      // instead of failing on a fake example.com URL. Swap for real judge
+      // media when you have it.
+      introVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     },
 
     previousWinners: [
-      { name: 'Riya Shah', position: 1, positionLabel: '1st Winner', imageUrl: 'https://example.com/winners/riya.jpg' },
-      { name: 'Aarav Mehta', position: 1, positionLabel: '1st Winner', imageUrl: 'https://example.com/winners/aarav.jpg' },
-      { name: 'Neha Verma', position: 2, positionLabel: '2nd Winner', imageUrl: 'https://example.com/winners/neha.jpg' },
-      { name: 'Ishita Chona', position: 3, positionLabel: '3rd Winner', imageUrl: 'https://example.com/winners/ishita.jpg' },
+      { name: 'Riya Shah', position: 1, positionLabel: '1st Winner', imageUrl: 'https://i.pravatar.cc/300?img=32' },
+      { name: 'Aarav Mehta', position: 1, positionLabel: '1st Winner', imageUrl: 'https://i.pravatar.cc/300?img=12' },
+      { name: 'Neha Verma', position: 2, positionLabel: '2nd Winner', imageUrl: 'https://i.pravatar.cc/300?img=45' },
+      { name: 'Ishita Chona', position: 3, positionLabel: '3rd Winner', imageUrl: 'https://i.pravatar.cc/300?img=28' },
     ],
 
     rewards: [
@@ -73,7 +80,7 @@ async function run() {
     },
 
     disclaimer: { en: 'Only contributions from paid participants will be considered for judging.' },
-    prizeMoneyExplainerVideoUrl: 'https://example.com/videos/how-you-get-paid.mp4',
+    prizeMoneyExplainerVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     refundPolicyUrl: 'https://feedants.com/refund-policy',
     paymentProvider: 'razorpay',
     referralBaseUrl: 'https://feedants.com/r/',
@@ -91,6 +98,12 @@ async function run() {
 
   console.log('[seed] created competition:', competition._id.toString());
   console.log('[seed] demo user:', demoUser._id.toString());
+  console.log('');
+  console.log('Paste this line into mobile/.env:');
+  console.log(`EXPO_PUBLIC_DEMO_COMPETITION_ID=${competition._id.toString()}`);
+  console.log('');
+  console.log('Then run this to get your token line:');
+  console.log(`  npm run mint-token -- ${demoUser._id.toString()}`);
   await mongoose.disconnect();
 }
 

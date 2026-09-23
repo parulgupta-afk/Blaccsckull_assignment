@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Linking } from 'react-native';
 import { colors } from '../theme/colors';
 import { t } from '../i18n';
+import Avatar from './Avatar';
 
 export default function PreviousWinnersCarousel({ winners, locale }) {
   if (!winners?.length) return null;
@@ -17,7 +18,7 @@ export default function PreviousWinnersCarousel({ winners, locale }) {
             onPress={() => w.videoUrl && Linking.openURL(w.videoUrl)}
             activeOpacity={w.videoUrl ? 0.7 : 1}
           >
-            <Image source={{ uri: w.imageUrl }} style={styles.photo} />
+            <Avatar uri={w.imageUrl} name={w.name} size={88} radius={12} />
             {w.videoUrl && (
               <View style={styles.playOverlay}>
                 <Text style={styles.playIcon}>▶</Text>
@@ -38,7 +39,6 @@ const styles = StyleSheet.create({
   title: { fontSize: 14, fontWeight: '700', color: colors.ink, marginBottom: 10 },
   row: { gap: 12 },
   item: { width: 88 },
-  photo: { width: 88, height: 88, borderRadius: 12, backgroundColor: colors.chipBg },
   playOverlay: {
     position: 'absolute',
     top: 34,

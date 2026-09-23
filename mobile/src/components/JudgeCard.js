@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
 import { colors } from '../theme/colors';
 import { t } from '../i18n';
+import Avatar from './Avatar';
 
 export default function JudgeCard({ judge, locale }) {
   return (
     <View style={styles.card}>
-      <Image source={{ uri: judge.photoUrl }} style={styles.avatar} />
+      <Avatar uri={judge.photoUrl} name={judge.name} size={52} />
       <View style={styles.info}>
         <Text style={styles.role}>{t(locale, 'judge')}</Text>
         <Text style={styles.name}>{judge.name}</Text>
@@ -34,7 +35,6 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     gap: 12,
   },
-  avatar: { width: 52, height: 52, borderRadius: 26, backgroundColor: colors.chipBg },
   info: { flex: 1 },
   role: { fontSize: 11, color: colors.muted },
   name: { fontSize: 15, fontWeight: '700', color: colors.ink },
