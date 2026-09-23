@@ -27,6 +27,7 @@ import BottomActionBar from '../components/BottomActionBar';
 export default function CompetitionDetailsScreen({ competitionId, isAuthenticated = true, onGoBack }) {
   const [locale, setLocale] = useState('en');
   const [isPicking, setIsPicking] = useState(false);
+  const { data: competition, isLoading, isError, error, refetch } = useCompetitionDetails(competitionId, locale);
   const activeCompetitionId = competition?.id || competitionId;
   const registerMutation = useRegisterCompetition(activeCompetitionId, locale);
   const submitMutation = useSubmitEntry(activeCompetitionId, locale);
