@@ -63,28 +63,33 @@ async function run() {
     ],
 
     rewards: [
-      { position: 1, label: { en: '1st Winner' }, amount: 550 },
-      { position: 2, label: { en: '2nd Winner' }, amount: 300 },
-      { position: 3, label: { en: '3rd Winner' }, amount: 240 },
-      { position: 4, label: { en: '4th Winner' }, amount: 200 },
-      { position: 5, label: { en: '5th Winner' }, amount: 130 },
-      { position: 6, label: { en: '6th Winner' }, amount: 80 },
+      { position: 1, label: { en: '1st Winner', hi: '1st विजेता' }, amount: 550 },
+      { position: 2, label: { en: '2nd Winner', hi: '2nd विजेता' }, amount: 300 },
+      { position: 3, label: { en: '3rd Winner', hi: '3rd विजेता' }, amount: 240 },
+      { position: 4, label: { en: '4th Winner', hi: '4th विजेता' }, amount: 200 },
+      { position: 5, label: { en: '5th Winner', hi: '5th विजेता' }, amount: 130 },
+      { position: 6, label: { en: '6th Winner', hi: '6th विजेता' }, amount: 80 },
     ],
 
     tabContent: {
       about: {
         en: 'This is an online classical dance competition open for all age groups. Participate from anywhere and showcase your talent. Express your passion through traditional dance.',
-        hi: 'यह सभी आयु समूहों के लिए खुली एक ऑनलाइन शास्त्रीय नृत्य प्रतियोगिता है। कहीं से भी भाग लें और अपनी प्रतिभा दिखाएं।',
+        hi: 'यह सभी आयु समूहों के लिए खुली एक ऑनलाइन शास्त्रीय नृत्य प्रतियोगिता है। कहीं से भी भाग लें और अपनी प्रतिभा दिखाएं। पारंपरिक नृत्य के माध्यम से अपनी कला और प्रतिभा को प्रदर्शित करें।',
       },
       judgingParameters: {
         en: 'Technique, expression (abhinaya), rhythm accuracy, costume & presentation, and originality of choreography.',
+        hi: 'तकनीक, भाव (अभिनय), ताल और लय की शुद्धता, वेशभूषा एवं प्रस्तुति, और कोरियोग्राफी की मौलिकता।',
       },
       rulesAndEligibility: {
         en: 'Open to all ages. One submission per participant. Entry must be an original, unedited performance video under 5 minutes.',
+        hi: 'सभी आयु वर्ग के लिए खुला है। प्रति प्रतिभागी एक प्रविष्टि। प्रविष्टि 5 मिनट से कम का मूल, अप्रयुक्त प्रदर्शन वीडियो होना चाहिए।',
       },
     },
 
-    disclaimer: { en: 'Only contributions from paid participants will be considered for judging.' },
+    disclaimer: {
+      en: 'Only contributions from paid participants will be considered for judging.',
+      hi: 'निर्णय के लिए केवल शुल्क भुगतान करने वाले प्रतिभागियों की प्रविष्टियों पर ही विचार किया जाएगा।',
+    },
     prizeMoneyExplainerVideoUrl: 'https://assets.testfiles.dev/video/sample-3s.mp4',
     refundPolicyUrl: 'https://feedants.com/refund-policy',
     paymentProvider: 'razorpay',

@@ -24,6 +24,8 @@
   "rewards": "पुरस्कार",
   "allPositions": "(सभी स्थान)",
   "disclaimer": "अस्वीकरण",
+  "disclaimerNote": "निर्णय के लिए केवल शुल्क भुगतान करने वाले प्रतिभागियों की प्रविष्टियों पर ही विचार किया जाएगा।",
+  "winnersGetCertificate": "विजेताओं को प्रमाणपत्र मिलेगा",
   "refundPolicy": "धनवापसी नीति",
   "securePayments": "सुरक्षित भुगतान द्वारा संचालित",
   "registerNow": "अभी पंजीकरण करें",
@@ -35,5 +37,15 @@
   "submissionNotOpenYet": "सबमिशन जल्द शुरू होगा",
   "completingPayment": "भुगतान पूरा हो रहा है…",
   "completed": "प्रतियोगिता समाप्त",
-  "loginToRegister": "पंजीकरण के लिए लॉगिन करें"
+  "loginToRegister": "पंजीकरण के लिए लॉगिन करें",
+  "close": "बंद करें",
+  "watchVideo": "वीडियो देखें",
+  "tag_Dance": "शास्त्रीय नृत्य",
+  "tag_Multi-Win": "मल्टी-विन",
+  "winnerPosition_1": "1st विजेता",
+  "winnerPosition_2": "2nd विजेता",
+  "winnerPosition_3": "3rd विजेता",
+  "winnerPosition_4": "4th विजेता",
+  "winnerPosition_5": "5th विजेता",
+  "winnerPosition_6": "6th विजेता"
 }

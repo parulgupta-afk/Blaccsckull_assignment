@@ -1,21 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 /**
- * Countdown is computed against (targetDate - serverTime), with a captured
- * offset from device "now" -- so a participant with a wrong device clock
- * still sees an accurate countdown anchored to the backend's authoritative
- * `serverTime` field, without needing a fresh network call every tick.
+ * Countdown is computed against (targetDate - authoritativeNow).
+ * We maintain a smooth second-by-second countdown without erratic jumping
+ * caused by frequent network refetches or uninitialized zero states.
  */
 export function useCountdown(targetDate, serverTime) {
-  const [remainingMs, setRemainingMs] = useState(0);
+  const serverOffsetRef = useRef(null);
+
+  if (serverOffsetRef.current === null && serverTime) {
+    serverOffsetRef.current = new Date(serverTime).getTime() - Date.now();
+  }
+
+  const computeRemaining = () => {
+    if (!targetDate) return 0;
+    const target = new Date(targetDate).getTime();
+    if (isNaN(target)) return 0;
+    const offset = serverOffsetRef.current !== null ? serverOffsetRef.current : 0;
+    const currentVirtualTime = Date.now() + offset;
+    return Math.max(target - currentVirtualTime, 0);
+  };
+
+  const [remainingMs, setRemainingMs] = useState(() => computeRemaining());
 
   useEffect(() => {
-    if (!targetDate || !serverTime) return undefined;
+    if (!targetDate) return undefined;
 
-    const target = new Date(targetDate).getTime();
-    const offset = new Date(serverTime).getTime() - Date.now();
+    if (serverTime) {
+      const freshOffset = new Date(serverTime).getTime() - Date.now();
+      if (serverOffsetRef.current === null || Math.abs(freshOffset - serverOffsetRef.current) > 3000) {
+        serverOffsetRef.current = freshOffset;
+      }
+    }
 
-    const tick = () => setRemainingMs(Math.max(target - (Date.now() + offset), 0));
+    const tick = () => setRemainingMs(computeRemaining());
     tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);

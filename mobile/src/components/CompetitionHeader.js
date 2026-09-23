@@ -3,9 +3,18 @@ import { View, Text, StyleSheet } from 'react-native';
 import { colors } from '../theme/colors';
 import { t } from '../i18n';
 
+const TAG_TRANSLATIONS = {
+  Dance: { en: 'Dance', hi: 'शास्त्रीय नृत्य' },
+  'Multi-Win': { en: 'Multi-Win', hi: 'मल्टी-विन' },
+};
+
 export default function CompetitionHeader({ competition, locale }) {
-  const { title, tags, winnersGetCertificate, prizePool, currency, entryFee, capacity } = competition;
+  const { title, tags, winnersGetCertificate, prizePool, entryFee, capacity } = competition;
   const spotsPct = Math.min(capacity.confirmedParticipants / capacity.maxParticipants, 1);
+
+  const getTagLabel = (tag) => {
+    return TAG_TRANSLATIONS[tag]?.[locale] || tag;
+  };
 
   return (
     <View style={styles.card}>
@@ -21,10 +30,12 @@ export default function CompetitionHeader({ competition, locale }) {
       <View style={styles.tagRow}>
         {tags.map((tag) => (
           <View key={tag} style={styles.chip}>
-            <Text style={styles.chipText}>{tag}</Text>
+            <Text style={styles.chipText}>{getTagLabel(tag)}</Text>
           </View>
         ))}
-        {winnersGetCertificate && <Text style={styles.certNote}>🏆 Winners get certificate</Text>}
+        {winnersGetCertificate && (
+          <Text style={styles.certNote}>🏆 {t(locale, 'winnersGetCertificate')}</Text>
+        )}
       </View>
 
       <View style={styles.metricsRow}>
@@ -53,21 +64,21 @@ export default function CompetitionHeader({ competition, locale }) {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: colors.border },
+  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 14, borderWidth: 1, borderColor: colors.border },
   titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  title: { fontSize: 19, fontWeight: '700', color: colors.ink, flexShrink: 1 },
-  registeredBadge: { backgroundColor: colors.primarySoft, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4 },
-  registeredBadgeText: { color: colors.primary, fontWeight: '600', fontSize: 12 },
-  tagRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 10, flexWrap: 'wrap' },
-  chip: { backgroundColor: colors.chipBg, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 },
-  chipText: { fontSize: 12, color: colors.bodyText },
-  certNote: { fontSize: 12, color: colors.bodyText },
-  metricsRow: { flexDirection: 'row', marginTop: 16, gap: 20 },
-  metricLabel: { fontSize: 12, color: colors.muted },
+  title: { fontSize: 18, fontWeight: '700', color: colors.ink, flexShrink: 1 },
+  registeredBadge: { backgroundColor: colors.primarySoft, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 3 },
+  registeredBadgeText: { color: colors.primary, fontWeight: '600', fontSize: 11 },
+  tagRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8, flexWrap: 'wrap' },
+  chip: { backgroundColor: colors.chipBg, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
+  chipText: { fontSize: 11, color: colors.bodyText, fontWeight: '600' },
+  certNote: { fontSize: 11, color: colors.bodyText, fontWeight: '500' },
+  metricsRow: { flexDirection: 'row', marginTop: 12, gap: 16, alignItems: 'center' },
+  metricLabel: { fontSize: 11, color: colors.muted, fontWeight: '500' },
   metricValue: { fontSize: 16, fontWeight: '700', color: colors.primary },
   spotsCol: { flex: 1 },
-  spotsLabel: { fontSize: 12, color: colors.bodyText, marginBottom: 6 },
-  progressTrack: { height: 4, backgroundColor: colors.border, borderRadius: 2, overflow: 'hidden' },
-  progressFill: { height: 4, backgroundColor: colors.primary },
-  spotsSub: { fontSize: 11, color: colors.muted, marginTop: 4 },
+  spotsLabel: { fontSize: 12, fontWeight: '700', color: colors.ink, marginBottom: 5 },
+  progressTrack: { height: 6, backgroundColor: '#CFE5E3', borderRadius: 3, overflow: 'hidden' },
+  progressFill: { height: 6, backgroundColor: colors.primary, borderRadius: 3 },
+  spotsSub: { fontSize: 10, color: colors.muted, marginTop: 3 },
 });

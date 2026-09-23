@@ -19,7 +19,7 @@ function DateCell({ icon, label, iso, locale }) {
   return (
     <View style={styles.cell}>
       <Text style={styles.icon}>{icon}</Text>
-      <View>
+      <View style={styles.textWrap}>
         <Text style={styles.label}>{label}</Text>
         <Text style={styles.value}>{datePart}</Text>
         <Text style={styles.time}>{timePart}</Text>
@@ -43,12 +43,13 @@ export default function ImportantDatesGrid({ dates, locale }) {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: colors.border },
-  title: { fontSize: 14, fontWeight: '700', color: colors.ink, marginBottom: 12 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 16 },
-  cell: { flexDirection: 'row', gap: 8, width: '45%' },
+  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 14, borderWidth: 1, borderColor: colors.border },
+  title: { fontSize: 14, fontWeight: '700', color: colors.ink, marginBottom: 8 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+  cell: { flexDirection: 'row', gap: 8, width: '46%' },
   icon: { fontSize: 16 },
+  textWrap: { flex: 1 },
   label: { fontSize: 11, color: colors.muted },
-  value: { fontSize: 13, fontWeight: '700', color: colors.ink },
+  value: { fontSize: 13, fontWeight: '700', color: colors.ink, marginTop: 1 },
   time: { fontSize: 11, color: colors.bodyText },
 });

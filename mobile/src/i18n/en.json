@@ -24,6 +24,8 @@
   "rewards": "Rewards",
   "allPositions": "(All Positions)",
   "disclaimer": "Disclaimer",
+  "disclaimerNote": "Only contributions from paid participants will be considered for judging.",
+  "winnersGetCertificate": "Winners get certificate",
   "refundPolicy": "Refund policy",
   "securePayments": "Secure payments powered by",
   "registerNow": "Register Now",
@@ -35,5 +37,15 @@
   "submissionNotOpenYet": "Submissions open soon",
   "completingPayment": "Completing payment…",
   "completed": "Competition Completed",
-  "loginToRegister": "Login to Register"
+  "loginToRegister": "Login to Register",
+  "close": "Close",
+  "watchVideo": "Watch Video",
+  "tag_Dance": "Dance",
+  "tag_Multi-Win": "Multi-Win",
+  "winnerPosition_1": "1st Winner",
+  "winnerPosition_2": "2nd Winner",
+  "winnerPosition_3": "3rd Winner",
+  "winnerPosition_4": "4th Winner",
+  "winnerPosition_5": "5th Winner",
+  "winnerPosition_6": "6th Winner"
 }

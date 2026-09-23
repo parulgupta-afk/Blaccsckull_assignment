@@ -23,25 +23,18 @@ import PreviousWinnersCarousel from '../components/PreviousWinnersCarousel';
 import InfoTabs from '../components/InfoTabs';
 import RewardsList from '../components/RewardsList';
 import BottomActionBar from '../components/BottomActionBar';
+import VideoModal from '../components/VideoModal';
 
 export default function CompetitionDetailsScreen({ competitionId, isAuthenticated = true, onGoBack }) {
   const [locale, setLocale] = useState('en');
   const [isPicking, setIsPicking] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(null); // { url, title }
+
   const { data: competition, isLoading, isError, error, refetch } = useCompetitionDetails(competitionId, locale);
-  // Once the backend responds, register/submit target the *canonical*
-  // competition id it actually resolved (competition.id) rather than the
-  // prop we asked for -- these can differ when the backend's own fallback
-  // (e.g. an invalid/missing EXPO_PUBLIC_DEMO_COMPETITION_ID) served a
-  // different competition than the one originally requested.
   const activeCompetitionId = competition?.id || competitionId;
   const registerMutation = useRegisterCompetition(activeCompetitionId, locale);
   const submitMutation = useSubmitEntry(activeCompetitionId, locale);
 
-  // Real file picker + validation; the network upload itself is a
-  // clearly-labeled stub (see src/utils/uploadMedia.js) since it needs
-  // object-storage credentials that can't be committed here. Picker
-  // cancellation and validation errors are surfaced to the user instead
-  // of failing silently.
   const handleUpload = async () => {
     setIsPicking(true);
     try {
@@ -49,21 +42,35 @@ export default function CompetitionDetailsScreen({ competitionId, isAuthenticate
         type: ['video/*'],
         copyToCacheDirectory: true,
       });
+
       if (result.canceled) return;
 
       const file = result.assets?.[0];
+      if (!file) return;
+
+      const MAX_BYTES = 500 * 1024 * 1024;
+      if (file.size && file.size > MAX_BYTES) {
+        Alert.alert('File too large', 'Submission video must be under 500 MB.');
+        return;
+      }
+
       const mediaUrl = await uploadSubmissionMedia(file);
-      submitMutation.mutate(mediaUrl);
+      submitMutation.mutate({ mediaUrl });
     } catch (err) {
-      Alert.alert('Upload', err.message || 'Something went wrong selecting your file.');
+      Alert.alert('Upload failed', err.message || 'Could not pick or upload file.');
     } finally {
       setIsPicking(false);
     }
   };
 
+  const handlePlayVideo = (url, title) => {
+    if (!url) return;
+    setActiveVideo({ url, title });
+  };
+
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.centered}>
+      <SafeAreaView style={[styles.screen, styles.centered]}>
         <ActivityIndicator size="large" color={colors.primary} />
       </SafeAreaView>
     );
@@ -71,9 +78,9 @@ export default function CompetitionDetailsScreen({ competitionId, isAuthenticate
 
   if (isError || !competition) {
     return (
-      <SafeAreaView style={styles.centered}>
-        <Text style={styles.errorText}>{error?.message || 'Competition not found.'}</Text>
-        <TouchableOpacity onPress={() => refetch()} style={styles.retryBtn}>
+      <SafeAreaView style={[styles.screen, styles.centered]}>
+        <Text style={styles.errorText}>{error?.message || 'Could not load competition details.'}</Text>
+        <TouchableOpacity style={styles.retryBtn} onPress={() => refetch()}>
           <Text style={styles.retryText}>Retry</Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -83,30 +90,44 @@ export default function CompetitionDetailsScreen({ competitionId, isAuthenticate
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.topBar}>
-        <TouchableOpacity onPress={onGoBack} style={styles.backBtn}>
-          <Text style={styles.backText}>← Go back</Text>
-        </TouchableOpacity>
+        {onGoBack ? (
+          <TouchableOpacity onPress={onGoBack} style={styles.backBtn}>
+            <Text style={styles.backText}>← {locale === 'hi' ? 'वापस' : 'Back'}</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={{ width: 40 }} />
+        )}
         <View style={styles.langToggle}>
-          <TouchableOpacity onPress={() => setLocale('en')} style={[styles.langPill, locale === 'en' && styles.langPillActive]}>
+          <TouchableOpacity
+            style={[styles.langPill, locale === 'en' && styles.langPillActive]}
+            onPress={() => setLocale('en')}
+            activeOpacity={0.8}
+          >
             <Text style={[styles.langText, locale === 'en' && styles.langTextActive]}>ENG</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setLocale('hi')} style={[styles.langPill, locale === 'hi' && styles.langPillActive]}>
+          <TouchableOpacity
+            style={[styles.langPill, locale === 'hi' && styles.langPillActive]}
+            onPress={() => setLocale('hi')}
+            activeOpacity={0.8}
+          >
             <Text style={[styles.langText, locale === 'hi' && styles.langTextActive]}>हिंदी</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <CompetitionHeader competition={competition} locale={locale} />
-        <JudgeCard judge={competition.judge} locale={locale} />
+        <JudgeCard judge={competition.judge} locale={locale} onPlayVideo={handlePlayVideo} />
         <CountdownBanner competition={competition} locale={locale} />
         <ImportantDatesGrid dates={competition.dates} locale={locale} />
-        <PreviousWinnersCarousel winners={competition.previousWinners} locale={locale} />
+        <PreviousWinnersCarousel winners={competition.previousWinners} locale={locale} onPlayVideo={handlePlayVideo} />
         <InfoTabs tabs={competition.tabs} locale={locale} />
         <RewardsList rewards={competition.rewards} currency={competition.currency} locale={locale} />
         {competition.disclaimer && (
           <View style={styles.disclaimerBox}>
-            <Text style={styles.disclaimerText}>ⓘ {competition.disclaimer}</Text>
+            <Text style={styles.disclaimerText}>
+              ⓘ {locale === 'hi' ? 'निर्णय के लिए केवल शुल्क भुगतान करने वाले प्रतिभागियों की प्रविष्टियों पर ही विचार किया जाएगा।' : competition.disclaimer}
+            </Text>
           </View>
         )}
       </ScrollView>
@@ -118,6 +139,14 @@ export default function CompetitionDetailsScreen({ competitionId, isAuthenticate
         isRegistering={registerMutation.isPending || submitMutation.isPending || isPicking}
         onRegister={() => registerMutation.mutate()}
         onUpload={handleUpload}
+      />
+
+      <VideoModal
+        visible={Boolean(activeVideo)}
+        videoUrl={activeVideo?.url}
+        title={activeVideo?.title}
+        onClose={() => setActiveVideo(null)}
+        locale={locale}
       />
     </SafeAreaView>
   );
@@ -134,16 +163,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
   },
   backBtn: {},
-  backText: { fontSize: 15, fontWeight: '600', color: colors.ink },
+  backText: { fontSize: 14, fontWeight: '600', color: colors.ink },
   langToggle: { flexDirection: 'row', backgroundColor: colors.chipBg, borderRadius: 20, padding: 2 },
-  langPill: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 18 },
+  langPill: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 16 },
   langPillActive: { backgroundColor: colors.primary },
-  langText: { fontSize: 12, color: colors.bodyText, fontWeight: '600' },
+  langText: { fontSize: 11, color: colors.bodyText, fontWeight: '600' },
   langTextActive: { color: '#fff' },
-  content: { paddingHorizontal: 16, paddingBottom: 24, gap: 14 },
-  disclaimerBox: { backgroundColor: colors.primarySoft, borderRadius: 10, padding: 12 },
-  disclaimerText: { fontSize: 12, color: colors.ink },
+  content: { paddingHorizontal: 16, paddingTop: 2, paddingBottom: 16, gap: 10 },
+  disclaimerBox: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#BDE4E0',
+  },
+  disclaimerText: { fontSize: 12, color: colors.ink, lineHeight: 18 },
 });
